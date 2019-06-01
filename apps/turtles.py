@@ -45,24 +45,50 @@ trace1 = go.Box(
     y=y1
 )
 
-box1 = [go.Box(
-    y=df[df.Gender == g].Weight,
-    name=g,
-    boxpoints='outliers',
-    # jitter=0.3,
-    pointpos=-1.8) for g in ['f', 'm']]
-
 
 layout = [
 
     html.Div(children=''' simple box '''),
-    dcc.Graph(
-        id='box_1',
-        figure={
-            'data': box1,
-        }
+
+    # top controls
+    html.Div(
+        [
+            html.Div(
+                dcc.Dropdown(
+                    id="box1_dwn_boxpoints",
+                    options=[
+                        {"label": "Outliers", "value": "outliers"},
+                        {"label": "All", "value": "all"},
+                        {"label": "Suspected", "value": "suspectedoutliers"},
+                        {"label": "None", "value": False},
+                    ],
+                    value=False,
+                    clearable=False,
+                ),
+                className="two columns",
+            ),
+            html.Div(
+                dcc.Dropdown(
+                    id="box1_dwn_y",
+                    options=[
+                        {"label": "Weight", "value": "Weight"},
+                        {"label": "Carapace", "value": "Carapace"},
+                        {"label": "Plastron", "value": "Plastron"},
+                        {"label": "Annuli", "value": "Annuli"},
+                    ],
+                    value="Weight",
+                    clearable=False,
+                ),
+                className="two columns",
+            ),
+        ],
+        className="row",
+        style={"marginBottom": "10"},
     ),
 
+    dcc.Graph(
+        id='box_1',
+    ),
 
     html.Div(children=''' Histogram, Weight by Gender and Location. '''),
     dcc.Graph(
@@ -76,3 +102,20 @@ layout = [
         figure=facet_box,
     )
 ]
+
+
+@app.callback(
+    Output('box_1', 'figure'),
+    [
+        Input('box1_dwn_boxpoints', 'value'),
+        Input('box1_dwn_y', 'value')])
+def update_box_1(boxpoints, y):
+
+    box1 = [go.Box(
+        y=df[df.Gender == g][y],
+        name=g,
+        boxpoints=boxpoints,
+        # jitter=0.3,
+        pointpos=-1.8) for g in ['f', 'm']]
+
+    return {'data': box1}
