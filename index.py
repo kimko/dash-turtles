@@ -51,6 +51,7 @@ app.layout = html.Div(
     style={"margin": "0%"},
 )
 
+server = app.server
 
 @app.callback(Output("tab_content", "children"), [Input("tabs", "value")])
 def render_content(tab):
