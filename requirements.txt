@@ -28,3 +28,4 @@ Werkzeug==0.14.1
 numpy==1.12.0
 pandas==0.22.0
 dash-table-experiments==0.6.0
+dash_table
