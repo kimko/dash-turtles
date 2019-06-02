@@ -1,21 +1,13 @@
 # -*- coding: utf-8 -*-
-import json
-import math
-
-import pandas as pd
-import flask
-import dash
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import dash_html_components as html
-import plotly.plotly as py
 from plotly import graph_objs as go
-from turtle_manager import Turtle_Manager
 import plotly.figure_factory as ff
-from app import app, indicator, millify, df_to_table
-import numpy as np
 
+from app import app
 import apps.utils as utils
+from turtle_manager import Turtle_Manager
 
 df = Turtle_Manager().get_turtles()
 

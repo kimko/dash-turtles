@@ -4,7 +4,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 from app import app
-from apps import turtles
+from apps import turtles, table
 
 app.layout = html.Div(
     [
@@ -27,7 +27,7 @@ app.layout = html.Div(
                 style={"height": "20", "verticalAlign": "middle"},
                 children=[
                     dcc.Tab(label="Turtles", value="turtles_tab"),
-                    dcc.Tab(label="Other", value="other_tab"),
+                    dcc.Tab(label="Table", value="table_tab"),
                 ],
                 value="turtles_tab",
             )
@@ -40,12 +40,6 @@ app.layout = html.Div(
         # Tab content
         html.Div(id="tab_content", className="row", style={"margin": "2% 3%"}),
 
-        html.Link(href="https://use.fontawesome.com/releases/v5.2.0/css/all.css", rel="stylesheet"),
-        html.Link(href="https://cdn.rawgit.com/plotly/dash-app-stylesheets/2d266c578d2a6e8850ebce48fdb52759b2aef506/stylesheet-oil-and-gas.css", rel="stylesheet"),
-        html.Link(href="https://fonts.googleapis.com/css?family=Dosis", rel="stylesheet"),
-        html.Link(href="https://fonts.googleapis.com/css?family=Open+Sans", rel="stylesheet"),
-        html.Link(href="https://fonts.googleapis.com/css?family=Ubuntu", rel="stylesheet"),
-        html.Link(href="https://cdn.rawgit.com/amadoukane96/8a8cfdac5d2cecad866952c52a70a50e/raw/cd5a9bf0b30856f4fc7e3812162c74bfc0ebe011/dash_crm.css", rel="stylesheet")
     ],
     className="row",
     style={"margin": "0%"},
@@ -57,8 +51,8 @@ server = app.server
 def render_content(tab):
     if tab == "turtles_tab":
         return turtles.layout
-    elif tab == "other_tab":
-        return []
+    elif tab == "table_tab":
+        return table.layout
     else:
         return turtles.layout
 
