@@ -20,6 +20,23 @@ def drpdwn_boxpoints(id):
     return div
 
 
+def drpdwn_traceType(id):
+    div = html.Div(
+        dcc.Dropdown(
+            id=id,
+            options=[
+                {"label": "Histogram", "value": "histogram"},
+                {"label": "Bar", "value": "bar"},
+                {"label": "Box", "value": "box"},
+            ],
+            value='histogram',
+            clearable=False,
+        ),
+        className="two columns",
+    )
+    return div
+
+
 def drpdwn_tDimensions(id):
     div = html.Div(
         dcc.Dropdown(

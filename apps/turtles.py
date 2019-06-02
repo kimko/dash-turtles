@@ -19,35 +19,6 @@ import apps.utils as utils
 
 df = Turtle_Manager().get_turtles()
 
-
-facet_hist = ff.create_facet_grid(
-    df,
-    y='Weight',
-    facet_row='Gender',
-    facet_col='Capture Location',
-    trace_type='histogram',
-)
-
-facet_box = ff.create_facet_grid(
-    df,
-    y='Weight',
-    facet_row='Gender',
-    facet_col='Capture Location',
-    trace_type='box',
-)
-
-
-y0 = np.random.randn(50)-1
-y1 = np.random.randn(50)+1
-
-trace0 = go.Box(
-    y=y0
-)
-trace1 = go.Box(
-    y=y1
-)
-
-
 layout = [
 
     html.Div(children=''' simple box '''),
@@ -67,17 +38,20 @@ layout = [
         id='box_1',
     ),
 
+    # center controls
+    html.Div(
+        [
+            utils.drpdwn_traceType("facet1_dwn_traceType"),
+        ],
+        className="row",
+        style={"marginBottom": "10"},
+    ),
+
     html.Div(children=''' Histogram, Weight by Gender and Location. '''),
     dcc.Graph(
         id='facet_grid_1',
-        figure=facet_hist,
     ),
 
-    html.Div(children=''' Box, Weight by Gender. '''),
-    dcc.Graph(
-        id='facet_grid_2',
-        figure=facet_box,
-    )
 ]
 
 
@@ -96,3 +70,21 @@ def update_box_1(boxpoints, y):
         pointpos=-1.8) for g in ['f', 'm']]
 
     return {'data': box1}
+
+
+@app.callback(
+    Output('facet_grid_1', 'figure'),
+    [
+        Input('facet1_dwn_traceType', 'value'),
+        Input('box1_dwn_y', 'value')])
+def update_facet_grid1(traceType, y):
+
+    facet_hist = ff.create_facet_grid(
+        df,
+        y=y,
+        facet_row='Gender',
+        facet_col='Capture Location',
+        trace_type=traceType,
+    )
+
+    return facet_hist
