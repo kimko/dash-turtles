@@ -1,8 +1,8 @@
 import dash_table
-import pandas as pd
 
-df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/solar.csv')
+from turtle_manager import Turtle_Manager
 
+df = Turtle_Manager().get_turtles()
 
 layout = dash_table.DataTable(
     id='table',
