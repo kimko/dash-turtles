@@ -12,7 +12,8 @@ class Turtle_Manager():
         df = df[df['Carapace'] != 0]
         df = df[df['Plastron'] != 0]
         df = df[df['Species'] == 'Cpb']
-
-        fields = ['ID', 'Date', 'Capture Location', 'Gender', 'Annuli', 'Annuli_orig', 'Weight', 'Carapace', 'Plastron', 'Gravid', 'Surveyor(s)']
+        df.Date = pd.to_datetime(df.Date)
+        df.Gravid = df.Gravid.map({True: 'Y', False: ''})
+        fields = ['ID', 'Date', 'Capture Location', 'Gender', 'Annuli', 'Annuli_orig', 'Weight', 'Carapace', 'Plastron', 'Gravid']
         self.df = df[fields]
         return self.df
