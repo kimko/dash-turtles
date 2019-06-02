@@ -11,7 +11,7 @@ app.layout = html.Div(
         # header
         html.Div([
 
-            html.Span("Turtle Dashboard", className='app-title'),
+            html.Span("Turtle Barf", className='app-title'),
 
             html.Div(
                 html.Img(src='https://upload.wikimedia.org/wikipedia/commons/4/43/Painted_Turtle_%2814541060047%29.jpg', height="100%"), style={"float": "right", "height": "100%"})
