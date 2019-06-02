@@ -15,6 +15,8 @@ import plotly.figure_factory as ff
 from app import app, indicator, millify, df_to_table
 import numpy as np
 
+import apps.utils as utils
+
 df = Turtle_Manager().get_turtles()
 
 
@@ -53,34 +55,9 @@ layout = [
     # top controls
     html.Div(
         [
-            html.Div(
-                dcc.Dropdown(
-                    id="box1_dwn_boxpoints",
-                    options=[
-                        {"label": "Outliers", "value": "outliers"},
-                        {"label": "All", "value": "all"},
-                        {"label": "Suspected", "value": "suspectedoutliers"},
-                        {"label": "None", "value": False},
-                    ],
-                    value=False,
-                    clearable=False,
-                ),
-                className="two columns",
-            ),
-            html.Div(
-                dcc.Dropdown(
-                    id="box1_dwn_y",
-                    options=[
-                        {"label": "Weight", "value": "Weight"},
-                        {"label": "Carapace", "value": "Carapace"},
-                        {"label": "Plastron", "value": "Plastron"},
-                        {"label": "Annuli", "value": "Annuli"},
-                    ],
-                    value="Weight",
-                    clearable=False,
-                ),
-                className="two columns",
-            ),
+            utils.drpdwn_boxpoints("box1_dwn_boxpoints"),
+
+            utils.drpdwn_tDimensions("box1_dwn_y"),
         ],
         className="row",
         style={"marginBottom": "10"},
