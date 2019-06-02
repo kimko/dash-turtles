@@ -4,7 +4,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 from app import app
-from apps import turtles
+from apps import turtles, table
 
 app.layout = html.Div(
     [
@@ -27,7 +27,7 @@ app.layout = html.Div(
                 style={"height": "20", "verticalAlign": "middle"},
                 children=[
                     dcc.Tab(label="Turtles", value="turtles_tab"),
-                    dcc.Tab(label="Other", value="other_tab"),
+                    dcc.Tab(label="Table", value="table_tab"),
                 ],
                 value="turtles_tab",
             )
@@ -57,8 +57,8 @@ server = app.server
 def render_content(tab):
     if tab == "turtles_tab":
         return turtles.layout
-    elif tab == "other_tab":
-        return []
+    elif tab == "table_tab":
+        return table.layout
     else:
         return turtles.layout
 
