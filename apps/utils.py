@@ -53,3 +53,22 @@ def drpdwn_tDimensions(id):
         className="two columns",
     )
     return div
+
+
+def drpdwn_frequency(id):
+    div = html.Div(
+        dcc.Dropdown(
+            id=id,
+            options=[
+                {"label": "Daily", "value": "D"},
+                {"label": "Weekly", "value": "W"},
+                {"label": "Monthly", "value": "M"},
+                {"label": "Quartlery", "value": "Q"},
+                {"label": "Anually", "value": "A"},
+            ],
+            value='Q',
+            clearable=False,
+        ),
+        className="two columns",
+    )
+    return div
