@@ -34,6 +34,7 @@ layout = [
     html.Div(
         [
             utils.drpdwn_frequency("dwn_freq"),
+            utils.drpdwn_LocationPicker("dwn_location"),
         ],
         className="row",
         style={"marginBottom": "10"},
@@ -50,19 +51,26 @@ layout = [
     [Input('table_1', "derived_virtual_data"),
      Input('table_1', "derived_virtual_selected_rows"),
      Input('table_1', "ID"),
-     Input('dwn_freq', 'value')])
-def update_bar1(data, selected_rows, ID, frequency):
-    captureCount = df.set_index('Date')['ID']
+     Input('dwn_freq', 'value'),
+     Input('dwn_location', 'value')])
+def update_bar1(data, selected_rows, ID, frequency, locations):
+    if len(locations) > 0:
+        localdf = df[df['Capture Location'].isin(locations)].copy()
+    else:
+        localdf = df.copy()
+    captureCount = localdf.copy()
+    captureCount = captureCount.set_index('Date')['ID']
     captureCount = captureCount.groupby(pd.Grouper(freq=frequency)).count()
     captureCount = captureCount[captureCount > 0]
+
     box1 = go.Scatter(
         x=captureCount.index,
         y=captureCount.values,
         name='Captures',
         line={'width': 6},
     )
-
-    dateCount = pd.DataFrame(df.Date.unique())
+    dateCount = localdf.copy()
+    dateCount = pd.DataFrame(dateCount.Date.unique())
     dateCount['ID'] = '1'
     dateCount = dateCount.set_index(0)['ID']
     dateCount = dateCount.groupby(pd.Grouper(freq=frequency)).count()
