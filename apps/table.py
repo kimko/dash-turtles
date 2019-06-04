@@ -75,7 +75,10 @@ def update_bar1(data, selected_rows, ID, frequency):
         opacity=0.5,
     )
 
-    data = [box1, box2]
+    if (frequency != 'D'):
+        data = [box1, box2]
+    else:
+        data = [box1]
     layout = go.Layout(
         barmode='group',
         xaxis={'type': 'category'},
