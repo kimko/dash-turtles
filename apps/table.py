@@ -55,11 +55,11 @@ def update_bar1(data, selected_rows, ID, frequency):
     captureCount = df.set_index('Date')['ID']
     captureCount = captureCount.groupby(pd.Grouper(freq=frequency)).count()
     captureCount = captureCount[captureCount > 0]
-    box1 = go.Bar(
+    box1 = go.Scatter(
         x=captureCount.index,
         y=captureCount.values,
         name='Captures',
-        opacity=0.5,
+        line={'width': 6},
     )
 
     dateCount = pd.DataFrame(df.Date.unique())
