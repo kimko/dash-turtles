@@ -40,20 +40,17 @@ layout = [
         style={"marginBottom": "10"},
     ),
 
-    html.Div(id='datatable-interactivity-container'),
+    html.Div(id='chart1-container'),
 
     table(),
 ]
 
 
 @app.callback(
-    Output('datatable-interactivity-container', 'children'),
-    [Input('table_1', "derived_virtual_data"),
-     Input('table_1', "derived_virtual_selected_rows"),
-     Input('table_1', "ID"),
-     Input('dwn_freq', 'value'),
+    Output('chart1-container', 'children'),
+    [Input('dwn_freq', 'value'),
      Input('dwn_location', 'value')])
-def update_bar1(data, selected_rows, ID, frequency, locations):
+def update_bar1(frequency, locations):
     if len(locations) > 0:
         localdf = df[df['Capture Location'].isin(locations)].copy()
     else:
