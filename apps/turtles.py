@@ -12,7 +12,8 @@ from turtle_manager import Turtle_Manager
 df = Turtle_Manager().get_turtles()
 
 layout = [
-
+    # TODO 
+    # split violin plot here!  https://plot.ly/python/violin/
     html.Div(children=''' simple box '''),
 
     # top controls
