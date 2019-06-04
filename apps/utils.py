@@ -85,6 +85,6 @@ def drpdwn_LocationPicker(id):
             multi=True,
             value=['Gresham', 'Mason Flats'],
         ),
-        className="two columns",
+        className="four columns",
     )
     return div
