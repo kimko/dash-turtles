@@ -3,7 +3,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 import dash_table
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import plotly.graph_objs as go
 import dash_html_components as html
@@ -30,8 +30,48 @@ layout = [
 
     html.Div(id='table1-container'),
 
+    # Turtle button
+    html.Div(
+        [
+            html.Div(dcc.Input(id='turtle-id', type='text'), className="one columns")
+        ],
+        className="row",
+        style={"marginBottom": "10"},
+    ),
+
+    html.Div(id='explore-chart-container'),
+
 ]
 
+
+@app.callback(
+    Output('explore-chart-container', 'children'),
+    [Input('turtle-id', 'n_submit')],
+    [State('turtle-id', 'value')])
+def table(ns, turtleID):
+    turtleID = str(turtleID)
+    dfL = df.set_index('ID').copy()
+    if dfL.loc[turtleID].shape[0] == 0:
+        return
+    return dcc.Graph(
+        id='turtle-graph',
+        figure={
+            'data': [
+                go.Scatter(
+                    x=dfL.loc[turtleID, 'Date'],
+                    y=dfL.loc[turtleID, 'Weight'],
+                    text=dfL.loc[turtleID, 'Carapace'],
+                    mode='markers',
+                    opacity=0.7,
+                    marker={
+                        'size': 15,
+                        'line': {'width': 0.5, 'color': 'white'}
+                    },
+                    name="Turtle " + turtleID
+                )
+            ],
+        }
+    )
 
 @app.callback(
     Output('table1-container', 'children'),
