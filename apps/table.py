@@ -1,5 +1,5 @@
 import json
-from datetime import datetime, timedelta
+from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 import dash_table
@@ -7,7 +7,6 @@ from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import plotly.graph_objs as go
 import dash_html_components as html
-import dash_html_components as dhtml
 import pandas as pd
 
 from app import app
@@ -29,29 +28,17 @@ layout = [
 
     html.Div(id='chart1-container'),
 
-    dhtml.Div(id='click-data', style={'display': 'none'}),
+    html.Div(id='table1-container'),
 
-    dash_table.DataTable(
-        id='table_1',
-        columns=[{"name": i, "id": i} for i in df.columns],
-        data=df.to_dict('records'),
-        filtering=True,
-        sorting=True,
-        sorting_type="multi",
-        pagination_mode="fe",
-        pagination_settings={
-            "current_page": 0,
-            "page_size": 20,
-        }),
 ]
 
 
 @app.callback(
-    Output('table_1', 'data'),
+    Output('table1-container', 'children'),
     [Input('bar_1', 'clickData'),
      Input('dwn_freq', 'value')])
 def table(clickData, frequency):
-    dfL = df.copy()
+    dfL = df.sort_values('Date').copy()
     endDate = clickData['points'][0]['x']
     endDate = datetime.strptime(endDate, '%Y-%m-%d')
     startDate = str(endDate - relativedelta(months=4))
@@ -65,13 +52,24 @@ def table(clickData, frequency):
         startDate = str(endDate - relativedelta(months=4))
     if frequency == 'A':
         startDate = str(endDate - relativedelta(years=1))
-    print("---")
-    print(startDate)
-    print(endDate)
     dfL = dfL[(dfL['Date'] > startDate) & (dfL['Date'] <= endDate)]
     # dfL = dfL[(dfL['Date'] > x) & (dfL['Date'] < '2013-02-01')]
     data = dfL.to_dict('records')
-    return data
+
+    table = dash_table.DataTable(
+        id='table_1',
+        columns=[{"name": i, "id": i} for i in df.columns],
+        data=data,
+        filtering=True,
+        sorting=True,
+        sorting_type="multi",
+        pagination_mode="fe",
+        pagination_settings={
+            "current_page": 0,
+            "page_size": 20,
+        },
+    )
+    return table
 
 
 @app.callback(
