@@ -1,8 +1,13 @@
+import json
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
+
 import dash_table
 from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import plotly.graph_objs as go
 import dash_html_components as html
+import dash_html_components as dhtml
 import pandas as pd
 
 from app import app
@@ -10,24 +15,6 @@ import apps.utils as utils
 from turtle_manager import Turtle_Manager
 
 df = Turtle_Manager().get_turtles()
-
-
-def table():
-    table = dash_table.DataTable(
-        id='table_1',
-        columns=[{"name": i, "id": i} for i in df.columns],
-        data=df.to_dict('records'),
-        filtering=True,
-        sorting=True,
-        sorting_type="multi",
-        pagination_mode="fe",
-        pagination_settings={
-            "current_page": 0,
-            "page_size": 20,
-        },
-    )
-    return table
-
 
 layout = [
     # top controls
@@ -42,8 +29,56 @@ layout = [
 
     html.Div(id='chart1-container'),
 
-    table(),
+    dhtml.Div(id='click-data', style={'display': 'none'}),
+
+    dash_table.DataTable(
+        id='table_1',
+        columns=[{"name": i, "id": i} for i in df.columns],
+        data=df.to_dict('records'),
+        filtering=True,
+        sorting=True,
+        sorting_type="multi",
+        pagination_mode="fe",
+        pagination_settings={
+            "current_page": 0,
+            "page_size": 20,
+        }),
 ]
+
+
+@app.callback(
+    Output('table_1', 'data'),
+    [Input('bar_1', 'clickData'),
+     Input('dwn_freq', 'value')])
+def table(clickData, frequency):
+    dfL = df.copy()
+    endDate = clickData['points'][0]['x']
+    endDate = datetime.strptime(endDate, '%Y-%m-%d')
+    startDate = str(endDate - relativedelta(months=4))
+    if frequency == 'D':
+        startDate = str(endDate - relativedelta(days=1))
+    if frequency == 'W':
+        startDate = str(endDate - relativedelta(weeks=1))
+    if frequency == 'M':
+        startDate = str(endDate - relativedelta(months=1))
+    if frequency == 'Q':
+        startDate = str(endDate - relativedelta(months=4))
+    if frequency == 'A':
+        startDate = str(endDate - relativedelta(years=1))
+    print("---")
+    print(startDate)
+    print(endDate)
+    dfL = dfL[(dfL['Date'] > startDate) & (dfL['Date'] <= endDate)]
+    # dfL = dfL[(dfL['Date'] > x) & (dfL['Date'] < '2013-02-01')]
+    data = dfL.to_dict('records')
+    return data
+
+
+@app.callback(
+    Output('click-data', 'children'),
+    [Input('bar_1', 'clickData')])
+def display_click_data(clickData):
+    return json.dumps(clickData, indent=2)
 
 
 @app.callback(
@@ -88,7 +123,7 @@ def update_bar1(frequency, locations):
         barmode='group',
         xaxis={'type': 'category'},
         yaxis2={'overlaying': 'y',
-                'side': 'right'}
+                'side': 'right'},
     )
     graph = dcc.Graph(
         id='bar_1',
