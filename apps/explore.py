@@ -47,7 +47,7 @@ layout = [
     Output('explore-chart-container', 'children'),
     [Input('turtle-id', 'n_submit')],
     [State('turtle-id', 'value')])
-def table(ns, turtleID):
+def update_explore_chart(ns, turtleID):
     turtleID = str(turtleID)
     df = turtles.get_df().set_index('ID').copy()
     if df.loc[turtleID].shape[0] == 0:
@@ -77,8 +77,10 @@ def table(ns, turtleID):
     Output('table1-container', 'children'),
     [Input('bar_1', 'clickData'),
      Input('dwn_freq', 'value')])
-def table(clickData, frequency):
-    df = turtles.get_df().sort_values('Date').copy()
+def update_table(clickData, frequency):
+    columns = ['ID', 'Date', 'Capture Location', 'Gender', 'Annuli', 'Annuli_orig', 'Weight', 'Carapace', 'Plastron', 'Gravid']
+    df = turtles.get_df()
+    df = df[columns].sort_values('Date').copy()
     if clickData:
         endDate = clickData['points'][0]['x']
     else:

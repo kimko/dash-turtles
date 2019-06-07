@@ -34,7 +34,3 @@ class Turtle_Manager():
 
     def get_df(self):
         return self.df
-
-    def select_main_features(self):
-        fields = ['ID', 'Date', 'Capture Location', 'Gender', 'Annuli', 'Annuli_orig', 'Weight', 'Carapace', 'Plastron', 'Gravid']
-        return self.df[fields]
