@@ -1,6 +1,4 @@
 import json
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
 
 import dash_table
 from dash.dependencies import Input, Output, State
@@ -11,9 +9,10 @@ import pandas as pd
 
 from app import app
 import apps.utils as utils
-from turtle_manager import Turtle_Manager
+from turtle_manager import Turtle_Manager as tm
+from turtle_manager import filter_from_periodStart_to_endDate
 
-df = Turtle_Manager().get_turtles()
+turtles = tm()
 
 layout = [
     # top controls
@@ -50,17 +49,17 @@ layout = [
     [State('turtle-id', 'value')])
 def table(ns, turtleID):
     turtleID = str(turtleID)
-    dfL = df.set_index('ID').copy()
-    if dfL.loc[turtleID].shape[0] == 0:
+    df = turtles.get_df().set_index('ID').copy()
+    if df.loc[turtleID].shape[0] == 0:
         return
     return dcc.Graph(
         id='turtle-graph',
         figure={
             'data': [
                 go.Scatter(
-                    x=dfL.loc[turtleID, 'Date'],
-                    y=dfL.loc[turtleID, 'Weight'],
-                    text=dfL.loc[turtleID, 'Carapace'],
+                    x=df.loc[turtleID, 'Date'],
+                    y=df.loc[turtleID, 'Weight'],
+                    text=df.loc[turtleID, 'Carapace'],
                     mode='markers',
                     opacity=0.7,
                     marker={
@@ -73,28 +72,19 @@ def table(ns, turtleID):
         }
     )
 
+
 @app.callback(
     Output('table1-container', 'children'),
     [Input('bar_1', 'clickData'),
      Input('dwn_freq', 'value')])
 def table(clickData, frequency):
-    dfL = df.sort_values('Date').copy()
-    endDate = clickData['points'][0]['x']
-    endDate = datetime.strptime(endDate, '%Y-%m-%d')
-    startDate = str(endDate - relativedelta(months=4))
-    if frequency == 'D':
-        startDate = str(endDate - relativedelta(days=1))
-    if frequency == 'W':
-        startDate = str(endDate - relativedelta(weeks=1))
-    if frequency == 'M':
-        startDate = str(endDate - relativedelta(months=1))
-    if frequency == 'Q':
-        startDate = str(endDate - relativedelta(months=4))
-    if frequency == 'A':
-        startDate = str(endDate - relativedelta(years=1))
-    dfL = dfL[(dfL['Date'] > startDate) & (dfL['Date'] <= endDate)]
-    # dfL = dfL[(dfL['Date'] > x) & (dfL['Date'] < '2013-02-01')]
-    data = dfL.to_dict('records')
+    df = turtles.get_df().sort_values('Date').copy()
+    if clickData:
+        endDate = clickData['points'][0]['x']
+    else:
+        return ""
+    filter = filter_from_periodStart_to_endDate(df, endDate, frequency)
+    data = df[filter].to_dict('records')
 
     table = dash_table.DataTable(
         id='table_1',
@@ -124,11 +114,12 @@ def display_click_data(clickData):
     [Input('dwn_freq', 'value'),
      Input('dwn_location', 'value')])
 def update_bar1(frequency, locations):
+    df = turtles.get_df()
     if len(locations) > 0:
-        localdf = df[df['Capture Location'].isin(locations)].copy()
+        df = df[df['Capture Location'].isin(locations)].copy()
     else:
-        localdf = df.copy()
-    captureCount = localdf.copy()
+        df = df.copy()
+    captureCount = df.copy()
     captureCount = captureCount.set_index('Date')['ID']
     captureCount = captureCount.groupby(pd.Grouper(freq=frequency)).count()
     captureCount = captureCount[captureCount > 0]
@@ -139,7 +130,7 @@ def update_bar1(frequency, locations):
         name='Captures',
         line={'width': 6},
     )
-    dateCount = localdf.copy()
+    dateCount = df.copy()
     dateCount = pd.DataFrame(dateCount.Date.unique())
     dateCount['ID'] = '1'
     dateCount = dateCount.set_index(0)['ID']

@@ -9,7 +9,7 @@ from app import app
 import apps.utils as utils
 from turtle_manager import Turtle_Manager
 
-df = Turtle_Manager().get_turtles()
+df = Turtle_Manager().get_df()
 
 layout = [
     # TODO 
