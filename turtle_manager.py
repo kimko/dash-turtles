@@ -1,5 +1,6 @@
 from dateutil.relativedelta import relativedelta
-from datetime import datetime
+from datetime import datetime, date
+from calendar import month_name
 
 import pandas as pd
 
@@ -20,6 +21,14 @@ def filter_from_periodStart_to_endDate(df, endDate, period):
     return (df['Date'] > startDate) & (df['Date'] <= endDate)
 
 
+def get_count_per_month_and_year(df):
+    df = df[['Month', 'Year', 'ID']].sort_values('Month').copy()
+    df.Month = df.Month.map(lambda m: month_name[m])
+    df = df.groupby(['Month', 'Year']).count().reset_index()
+    df.columns = ['Month', 'Year', 'Count']
+    return df
+
+
 class Turtle_Manager():
     def __init__(self):
         df = pd.read_csv(
@@ -28,9 +37,17 @@ class Turtle_Manager():
         df = df[df['Carapace'] != 0]
         df = df[df['Plastron'] != 0]
         df = df[df['Species'] == 'Cpb']
-        df.Gravid = df.Gravid.map({True: 'Y', False: ''})
+        # df['Month'] = df.Date.map(lambda x: x.strftime("%B"))
         df.Date = pd.to_datetime(df.Date)
+        df['Month'] = df.Date.map(lambda x: x.month)
+        df['Year'] = df.Date.map(lambda x: x.year)
+        df.Gravid = df.Gravid.map({True: 'Y', False: ''})
+
         self.df = df
 
     def get_df(self):
         return self.df
+
+
+if __name__ == "__main__":
+    df = Turtle_Manager().get_df()
