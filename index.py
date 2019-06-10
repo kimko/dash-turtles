@@ -30,7 +30,7 @@ app.layout = html.Div(
                     dcc.Tab(label="Explore Surveys", value="explore_tab"),
                     dcc.Tab(label="Distributions", value="distributions_tab"),
                 ],
-                value="explore_by_month_tab",
+                value="explore_tab",
             )
 
         ],
@@ -47,6 +47,7 @@ app.layout = html.Div(
 )
 
 server = app.server
+
 
 @app.callback(Output("tab_content", "children"), [Input("tabs", "value")])
 def render_content(tab):

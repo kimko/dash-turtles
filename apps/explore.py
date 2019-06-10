@@ -25,18 +25,9 @@ layout = [
         style={"marginBottom": "10"},
     ),
 
-    html.Div(id='chart1-container'),
+    html.Div(id='survey-chart-container'),
 
     html.Div(id='table1-container'),
-
-    # Turtle button
-    html.Div(
-        [
-            html.Div(dcc.Input(id='turtle-id', type='text'), className="one columns")
-        ],
-        className="row",
-        style={"marginBottom": "10"},
-    ),
 
     html.Div(id='explore-chart-container'),
 
@@ -45,21 +36,20 @@ layout = [
 
 @app.callback(
     Output('explore-chart-container', 'children'),
-    [Input('turtle-id', 'n_submit')],
-    [State('turtle-id', 'value')])
-def update_explore_chart(ns, turtleID):
-    turtleID = str(turtleID)
-    df = turtles.get_df().set_index('ID').copy()
-    if df.loc[turtleID].shape[0] == 0:
+    [Input('table_1', "derived_virtual_data"),
+        Input('table_1', "derived_virtual_selected_rows")])
+def update_explore_chart(rows, selected):
+    turtleIDs = [rows[i]['ID'] for i in selected]
+    df = turtles.get_df().copy()
+    if len(turtleIDs) == 0:
         return
     return dcc.Graph(
         id='turtle-graph',
         figure={
             'data': [
                 go.Scatter(
-                    x=df.loc[turtleID, 'Date'],
-                    y=df.loc[turtleID, 'Weight'],
-                    text=df.loc[turtleID, 'Carapace'],
+                    x=df.loc[df.ID == turtleID, 'Date'],
+                    y=df.loc[df.ID == turtleID, 'Weight'],
                     mode='markers',
                     opacity=0.7,
                     marker={
@@ -67,8 +57,13 @@ def update_explore_chart(ns, turtleID):
                         'line': {'width': 0.5, 'color': 'white'}
                     },
                     name="Turtle " + turtleID
-                )
-            ],
+                ) for turtleID in turtleIDs],
+            'layout': {
+                "yaxis": {
+                    "automargin": True,
+                    "title": {"text": 'Weight'}
+                },
+            },
         }
     )
 
@@ -78,7 +73,8 @@ def update_explore_chart(ns, turtleID):
     [Input('bar_1', 'clickData'),
      Input('dwn_freq', 'value')])
 def update_table(clickData, frequency):
-    columns = ['ID', 'Date', 'Capture Location', 'Gender', 'Annuli', 'Annuli_orig', 'Weight', 'Carapace', 'Plastron', 'Gravid']
+    columns = ['ID', 'Date', 'Capture Location', 'Gender', 'Annuli',
+               'Annuli_orig', 'Weight', 'Carapace', 'Plastron', 'Gravid']
     df = turtles.get_df()
     df = df[columns].sort_values('Date').copy()
     if clickData:
@@ -95,6 +91,8 @@ def update_table(clickData, frequency):
         filtering=True,
         sorting=True,
         sorting_type="multi",
+        row_selectable="multi",
+        selected_rows=[0, 1],  # select furst two records
         pagination_mode="fe",
         pagination_settings={
             "current_page": 0,
@@ -112,7 +110,7 @@ def display_click_data(clickData):
 
 
 @app.callback(
-    Output('chart1-container', 'children'),
+    Output('survey-chart-container', 'children'),
     [Input('dwn_freq', 'value'),
      Input('dwn_location', 'value')])
 def update_bar1(frequency, locations):
