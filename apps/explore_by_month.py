@@ -19,6 +19,7 @@ layout = [
     # top controls
     html.Div(
         [
+            utils.drpdwn_frequency("exp_dwn_freq",option='MQ'),
             utils.drpdwn_LocationPicker("exp_dwn_location"),
         ],
         className="row",

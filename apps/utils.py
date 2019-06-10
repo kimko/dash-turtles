@@ -55,17 +55,21 @@ def drpdwn_tDimensions(id):
     return div
 
 
-def drpdwn_frequency(id):
+def drpdwn_frequency(id, option='all'):
+    options = [
+        {"label": "Daily", "value": "D"},
+        {"label": "Weekly", "value": "W"},
+        {"label": "Monthly", "value": "M"},
+        {"label": "Quartlery", "value": "Q"},
+        {"label": "Anually", "value": "A"},
+    ]
+    # Use Month and Quarter Only
+    if option == 'MQ':
+        options = options[2:4]
     div = html.Div(
         dcc.Dropdown(
             id=id,
-            options=[
-                {"label": "Daily", "value": "D"},
-                {"label": "Weekly", "value": "W"},
-                {"label": "Monthly", "value": "M"},
-                {"label": "Quartlery", "value": "Q"},
-                {"label": "Anually", "value": "A"},
-            ],
+            options=options,
             value='Q',
             clearable=False,
         ),
