@@ -21,11 +21,14 @@ def filter_from_periodStart_to_endDate(df, endDate, period):
     return (df['Date'] > startDate) & (df['Date'] <= endDate)
 
 
-def get_count_per_month_and_year(df):
-    df = df[['Month', 'Year', 'ID']].sort_values('Month').copy()
-    df.Month = df.Month.map(lambda m: month_name[m])
-    df = df.groupby(['Month', 'Year']).count().reset_index()
-    df.columns = ['Month', 'Year', 'Count']
+def get_count_per_period_and_year(df, period='M'):
+    if period == 'M':
+        df['Period'] = df.Date.map(lambda x: x.month_name())
+    elif period == 'Q':
+        df['Period'] = df.Date.map(lambda x: 'Q' + str(x.quarter))
+    df = df[['Period', 'Year', 'ID']].sort_values('Period').copy()
+    df = df.groupby(['Period', 'Year']).count().reset_index()
+    df.columns = ['Period', 'Year', 'Count']
     return df
 
 
