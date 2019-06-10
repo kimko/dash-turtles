@@ -35,8 +35,9 @@ layout = [
     [Input('exp_dwn_location', 'value')])
 def update_by_month_chart(locations):
     df = turtles.get_df()
+    if len(locations) > 0:
+        df = df[df['Capture Location'].isin(locations)]
     df = get_count_per_month_and_year(df)
-
     years = df.Year.unique()
     years.sort()
     data = [
