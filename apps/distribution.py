@@ -12,7 +12,7 @@ from turtle_manager import Turtle_Manager
 df = Turtle_Manager().get_df()
 
 layout = [
-    # TODO 
+    # TODO
     # split violin plot here!  https://plot.ly/python/violin/
     html.Div(children=''' simple box '''),
 
@@ -20,16 +20,13 @@ layout = [
     html.Div(
         [
             utils.drpdwn_boxpoints("box1_dwn_boxpoints"),
-
             utils.drpdwn_tDimensions("box1_dwn_y"),
         ],
         className="row",
         style={"marginBottom": "10"},
     ),
 
-    dcc.Graph(
-        id='box_1',
-    ),
+    html.Div(id='box_1_container'),
 
     # center controls
     html.Div(
@@ -41,15 +38,13 @@ layout = [
     ),
 
     html.Div(children=''' Histogram, Weight by Gender and Location. '''),
-    dcc.Graph(
-        id='facet_grid_1',
-    ),
+    html.Div(id='facet_grid_1_container'),
 
 ]
 
 
 @app.callback(
-    Output('box_1', 'figure'),
+    Output('box_1_container', 'children'),
     [
         Input('box1_dwn_boxpoints', 'value'),
         Input('box1_dwn_y', 'value')])
@@ -61,12 +56,14 @@ def update_box_1(boxpoints, y):
         boxpoints=boxpoints,
         # jitter=0.3,
         pointpos=-1.8) for g in ['f', 'm']]
-
-    return {'data': box1}
+    return dcc.Graph(
+        id='box_1',
+        figure=go.Figure(data=box1),
+    )
 
 
 @app.callback(
-    Output('facet_grid_1', 'figure'),
+    Output('facet_grid_1_container', 'children'),
     [
         Input('facet1_dwn_traceType', 'value'),
         Input('box1_dwn_y', 'value')])
@@ -79,5 +76,7 @@ def update_facet_grid1(traceType, y):
         facet_col='Capture Location',
         trace_type=traceType,
     )
-
-    return facet_hist
+    return dcc.Graph(
+        id='facet_grid_1',
+        figure=facet_hist,
+    )
