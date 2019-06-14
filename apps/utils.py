@@ -79,15 +79,17 @@ def drpdwn_frequency(id, option='all'):
 
 
 def drpdwn_LocationPicker(id):
+    # TODO use parameter for locations
     div = html.Div(
         dcc.Dropdown(
             id=id,
             options=[
-                {"label": "Gresham", "value": "Gresham"},
+                {"label": "Gresham","value": "Gresham"},
                 {"label": "Mason Flats", "value": "Mason Flats"},
+                {"label": "Whitaker Ponds", "value": "Whitaker Ponds"},
             ],
             multi=True,
-            value=['Gresham', 'Mason Flats'],
+            value=['Gresham', 'Mason Flats', 'Whitaker Ponds'],
         ),
         className="four columns",
     )
