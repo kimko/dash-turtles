@@ -59,6 +59,7 @@ def update_explore_chart(rows, selected):
                     name="Turtle " + turtleID
                 ) for turtleID in turtleIDs],
             'layout': {
+                "title": 'Individual turtles',
                 "yaxis": {
                     "automargin": True,
                     "title": {"text": 'Weight'}
@@ -114,6 +115,11 @@ def display_click_data(clickData):
     [Input('dwn_freq', 'value'),
      Input('dwn_location', 'value')])
 def update_bar1(frequency, locations):
+    caption = {'D': 'Count day',
+               'W': 'Count and surveys per week',
+               'M': 'Count and surveys per month',
+               'Q': 'Count and surveys per quarter',
+               'A': 'Count and surveys per year'}
     df = turtles.get_df()
     if len(locations) > 0:
         df = df[df['Capture Location'].isin(locations)].copy()
@@ -150,8 +156,11 @@ def update_bar1(frequency, locations):
         data = [box1]
     layout = go.Layout(
         barmode='group',
+        title=caption[frequency],
         xaxis={'type': 'category'},
-        yaxis2={'overlaying': 'y',
+        yaxis={'title': 'Count'},
+        yaxis2={'title': 'Days',
+                'overlaying': 'y',
                 'side': 'right'},
     )
     graph = dcc.Graph(

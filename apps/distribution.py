@@ -14,7 +14,7 @@ df = Turtle_Manager().get_df()
 layout = [
     # TODO
     # split violin plot here!  https://plot.ly/python/violin/
-    html.Div(children=''' simple box '''),
+    html.Div(children='''Select distribution dimension:'''),
 
     # top controls
     html.Div(
@@ -31,13 +31,13 @@ layout = [
     # center controls
     html.Div(
         [
+            html.Div(children='''Select chart type:'''),
             utils.drpdwn_traceType("facet1_dwn_traceType"),
         ],
         className="row",
         style={"marginBottom": "10"},
     ),
 
-    html.Div(children=''' Histogram, Weight by Gender and Location. '''),
     html.Div(id='facet_grid_1_container'),
 
 ]
@@ -49,7 +49,6 @@ layout = [
         Input('box1_dwn_boxpoints', 'value'),
         Input('box1_dwn_y', 'value')])
 def update_box_1(boxpoints, y):
-
     box1 = [go.Box(
         y=df[df.Gender == g][y],
         name=g,
@@ -58,7 +57,15 @@ def update_box_1(boxpoints, y):
         pointpos=-1.8) for g in ['f', 'm']]
     return dcc.Graph(
         id='box_1',
-        figure=go.Figure(data=box1),
+        figure=go.Figure(
+            data=box1,
+            layout={
+                "title": 'Distributions by {} and gender'.format(y),
+                "yaxis": {
+                    "automargin": True,
+                    "title": {"text": y}
+                },
+            }),
     )
 
 
@@ -76,6 +83,7 @@ def update_facet_grid1(traceType, y):
         facet_col='Capture Location',
         trace_type=traceType,
     )
+    facet_hist['layout']['title'] = '{} - {} by gender and location'.format(traceType, y)
     return dcc.Graph(
         id='facet_grid_1',
         figure=facet_hist,

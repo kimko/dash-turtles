@@ -56,6 +56,7 @@ def update_by_month_chart(period, locations):
             "categoryorder": "array",
             "categoryarray": month_name[1:13]
         },
+        yaxis={'title': 'Count'}
     )
 
     fig = go.Figure(data=data, layout=layout)
