@@ -1,4 +1,5 @@
 import json
+from calendar import month_name
 
 import dash_table
 from dash.dependencies import Input, Output, State
@@ -35,6 +36,8 @@ layout = [
     [Input('exp_dwn_freq', 'value'),
         Input('exp_dwn_location', 'value')])
 def update_by_month_chart(period, locations):
+    caption = {'M': 'Count per Month',
+               'Q': 'Count per Quarter'}
     df = turtles.get_df()
     if len(locations) > 0:
         df = df[df['Capture Location'].isin(locations)]
@@ -50,6 +53,12 @@ def update_by_month_chart(period, locations):
     layout = go.Layout(
         barmode='group',
         hovermode='closest',
+        title=caption[period],
+        xaxis={
+            "type": "category",
+            "categoryorder": "array",
+            "categoryarray": month_name[1:13]
+        },
     )
 
     fig = go.Figure(data=data, layout=layout)
