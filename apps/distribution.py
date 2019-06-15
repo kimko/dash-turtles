@@ -16,25 +16,25 @@ layout = [
     html.Div(
         [
             html.Div('Select distribution dimension:'),
-            utils.drpdwn_boxpoints("box1_dwn_boxpoints"),
-            utils.drpdwn_tDimensions("box1_dwn_y"),
+            utils.drpdwn_boxpoints('box1_dwn_boxpoints'),
+            utils.drpdwn_tDimensions('box1_dwn_y'),
         ],
-        className="row", style={"marginBottom": "10"},
+        className='row', style={'marginBottom': '10'},
     ),
 
     # Chart 1
     html.Div(
-        html.Div(id='box_1_container', className="eight columns"),
-        className="row", style={"marginBottom": "10"},
+        html.Div(id='box_1_container', className='eight columns'),
+        className='row', style={'marginBottom': '10'},
     ),
 
     # Button Group 2
     html.Div(
         [
             html.Div(children='Select chart type:'),
-            utils.drpdwn_traceType("facet1_dwn_traceType"),
+            utils.drpdwn_traceType('facet1_dwn_traceType'),
         ],
-        className="row", style={"marginBottom": "10"},
+        className='row', style={'marginBottom': '10'},
     ),
 
     # Chart 2
@@ -60,10 +60,10 @@ def update_box_1(boxpoints, y):
         figure=go.Figure(
             data=box1,
             layout={
-                "title": 'Distributions by {} and gender'.format(y),
-                "yaxis": {
-                    "automargin": True,
-                    "title": {"text": y}
+                'title': 'Distributions by {} and gender'.format(y),
+                'yaxis': {
+                    'automargin': True,
+                    'title': {'text': y}
                 },
             }),
     )

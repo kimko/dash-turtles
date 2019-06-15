@@ -39,7 +39,7 @@ class Turtle_Manager():
         df = df[df['Carapace'] != 0]
         df = df[df['Plastron'] != 0]
         df = df[df['Species'] == 'Cpb']
-        # df['Month'] = df.Date.map(lambda x: x.strftime("%B"))
+        # df['Month'] = df.Date.map(lambda x: x.strftime('%B'))
         df.Date = pd.to_datetime(df.Date)
         df['Month'] = df.Date.map(lambda x: x.month)
         df['Year'] = df.Date.map(lambda x: x.year)
@@ -51,5 +51,5 @@ class Turtle_Manager():
         return self.df
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     df = Turtle_Manager().get_df()

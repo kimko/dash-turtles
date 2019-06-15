@@ -18,11 +18,11 @@ layout = [
     # top controls
     html.Div(
         [
-            utils.drpdwn_frequency("dwn_freq"),
-            utils.drpdwn_LocationPicker("dwn_location"),
+            utils.drpdwn_frequency('dwn_freq'),
+            utils.drpdwn_LocationPicker('dwn_location'),
         ],
-        className="row",
-        style={"marginBottom": "10"},
+        className='row',
+        style={'marginBottom': '10'},
     ),
 
     html.Div(id='survey-chart-container'),
@@ -36,8 +36,8 @@ layout = [
 
 @app.callback(
     Output('explore-chart-container', 'children'),
-    [Input('table_1', "derived_virtual_data"),
-        Input('table_1', "derived_virtual_selected_rows")])
+    [Input('table_1', 'derived_virtual_data'),
+        Input('table_1', 'derived_virtual_selected_rows')])
 def update_explore_chart(rows, selected):
     turtleIDs = [rows[i]['ID'] for i in selected]
     df = turtles.get_df().copy()
@@ -56,13 +56,13 @@ def update_explore_chart(rows, selected):
                         'size': 15,
                         'line': {'width': 0.5, 'color': 'white'}
                     },
-                    name="Turtle " + turtleID
+                    name='Turtle ' + turtleID
                 ) for turtleID in turtleIDs],
             'layout': {
-                "title": 'Individual turtles',
-                "yaxis": {
-                    "automargin": True,
-                    "title": {"text": 'Weight'}
+                'title': 'Individual turtles',
+                'yaxis': {
+                    'automargin': True,
+                    'title': {'text': 'Weight'}
                 },
             },
         }
@@ -81,23 +81,23 @@ def update_table(clickData, frequency):
     if clickData:
         endDate = clickData['points'][0]['x']
     else:
-        return ""
+        return ''
     filter = filter_from_periodStart_to_endDate(df, endDate, frequency)
     data = df[filter].to_dict('records')
 
     table = dash_table.DataTable(
         id='table_1',
-        columns=[{"name": i, "id": i} for i in df.columns],
+        columns=[{'name': i, 'id': i} for i in df.columns],
         data=data,
         filtering=True,
         sorting=True,
-        sorting_type="multi",
-        row_selectable="multi",
+        sorting_type='multi',
+        row_selectable='multi',
         selected_rows=[0, 1],  # select furst two records
-        pagination_mode="fe",
+        pagination_mode='fe',
         pagination_settings={
-            "current_page": 0,
-            "page_size": 20,
+            'current_page': 0,
+            'page_size': 20,
         },
     )
     return table

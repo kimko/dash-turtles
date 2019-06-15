@@ -16,11 +16,11 @@ layout = [
     # top controls
     html.Div(
         [
-            utils.drpdwn_frequency("exp_dwn_freq", option='MQ'),
-            utils.drpdwn_LocationPicker("exp_dwn_location"),
+            utils.drpdwn_frequency('exp_dwn_freq', option='MQ'),
+            utils.drpdwn_LocationPicker('exp_dwn_location'),
         ],
-        className="row",
-        style={"marginBottom": "10"},
+        className='row',
+        style={'marginBottom': '10'},
     ),
 
     html.Div(id='by-period-chart-container'),
@@ -52,9 +52,9 @@ def update_by_month_chart(period, locations):
         hovermode='closest',
         title=caption[period],
         xaxis={
-            "type": "category",
-            "categoryorder": "array",
-            "categoryarray": month_name[1:13]
+            'type': 'category',
+            'categoryorder': 'array',
+            'categoryarray': month_name[1:13]
         },
         yaxis={'title': 'Count'}
     )
