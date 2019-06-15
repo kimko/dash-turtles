@@ -12,32 +12,32 @@ from turtle_manager import Turtle_Manager
 df = Turtle_Manager().get_df()
 
 layout = [
-    # TODO
-    # split violin plot here!  https://plot.ly/python/violin/
-    html.Div(children='''Select distribution dimension:'''),
-
-    # top controls
+    # Button Group 1
     html.Div(
         [
+            html.Div('Select distribution dimension:'),
             utils.drpdwn_boxpoints("box1_dwn_boxpoints"),
             utils.drpdwn_tDimensions("box1_dwn_y"),
         ],
-        className="row",
-        style={"marginBottom": "10"},
+        className="row", style={"marginBottom": "10"},
     ),
 
-    html.Div(id='box_1_container'),
+    # Chart 1
+    html.Div(
+        html.Div(id='box_1_container', className="eight columns"),
+        className="row", style={"marginBottom": "10"},
+    ),
 
-    # center controls
+    # Button Group 2
     html.Div(
         [
-            html.Div(children='''Select chart type:'''),
+            html.Div(children='Select chart type:'),
             utils.drpdwn_traceType("facet1_dwn_traceType"),
         ],
-        className="row",
-        style={"marginBottom": "10"},
+        className="row", style={"marginBottom": "10"},
     ),
 
+    # Chart 2
     html.Div(id='facet_grid_1_container'),
 
 ]
