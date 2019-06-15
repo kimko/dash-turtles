@@ -1,7 +1,7 @@
 import json
 
 import dash_table
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import plotly.graph_objs as go
 import dash_html_components as html
