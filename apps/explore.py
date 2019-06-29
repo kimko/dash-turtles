@@ -89,16 +89,14 @@ def update_table(clickData, frequency):
         id='table_1',
         columns=[{'name': i, 'id': i} for i in df.columns],
         data=data,
-        filtering=True,
-        sorting=True,
-        sorting_type='multi',
+        filter_action='native',
+        sort_action='native',
+        sort_mode='multi',
         row_selectable='multi',
         selected_rows=[0, 1],  # select furst two records
-        pagination_mode='fe',
-        pagination_settings={
-            'current_page': 0,
-            'page_size': 20,
-        },
+        page_action='native',
+        page_current=0,
+        page_size=20,
     )
     return table
 

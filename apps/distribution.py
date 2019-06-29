@@ -49,6 +49,8 @@ layout = html.Div([
         Input('box1_dwn_boxpoints', 'value'),
         Input('box1_dwn_y', 'value')])
 def update_box_1(boxpoints, y):
+    if boxpoints == 'None':
+        boxpoints = False
     box1 = [go.Box(
         y=df[df.Gender == g][y],
         name=g,
