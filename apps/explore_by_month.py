@@ -28,19 +28,10 @@ layout = [
 ]
 
 
-@app.callback(
-    Output('by-period-chart-container', 'children'),
-    [Input('exp_dwn_freq', 'value'),
-        Input('exp_dwn_location', 'value')])
-def update_by_month_chart(period, locations):
-    caption = {'M': 'Count per Month',
-               'Q': 'Count per Quarter'}
-    df = turtles.get_df()
-    if len(locations) > 0:
-        df = df[df['Capture Location'].isin(locations)]
-    df = get_count_per_period_and_year(df, period)
-    years = df.Year.unique()
-    years.sort()
+def by_month_plot(df, years, caption, period):
+    """
+    Generat a plotly bar chart
+    """
     data = [
         go.Bar(
             x=df[df.Year == year].Period,
@@ -65,3 +56,31 @@ def update_by_month_chart(period, locations):
         figure=fig
     )
     return graph
+
+
+def by_month_chart_format_data(df, period='Q', locations=[]):
+    """
+    Generate the data needed for the by_month chart.
+    """
+    caption = {'M': 'Count per Month',
+               'Q': 'Count per Quarter'}
+    if len(locations) > 0:
+        df = df[df['Capture Location'].isin(locations)]
+    df = get_count_per_period_and_year(df, period)
+    years = df.Year.unique()
+    years.sort()
+    return df, years, caption
+
+
+@app.callback(
+    Output('by-period-chart-container', 'children'),
+    [Input('exp_dwn_freq', 'value'),
+        Input('exp_dwn_location', 'value')])
+def by_month_chart_update(period, locations):
+    """
+    Update and Render by_month chart everytime the frequency or location dropdown changes value
+    """
+    df = turtles.get_df()
+    df, years, caption = by_month_chart_format_data(df, period, locations)
+
+    return by_month_plot(df, years, caption, period)
