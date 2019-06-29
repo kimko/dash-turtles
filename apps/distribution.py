@@ -11,7 +11,7 @@ from turtle_manager import Turtle_Manager
 
 df = Turtle_Manager().get_df()
 
-layout = [
+layout = html.Div([
     # Button Group 1
     html.Div(
         [
@@ -40,7 +40,7 @@ layout = [
     # Chart 2
     html.Div(id='facet_grid_1_container'),
 
-]
+])
 
 
 @app.callback(
