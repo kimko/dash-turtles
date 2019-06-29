@@ -32,9 +32,14 @@ def get_count_per_period_and_year(df, period='M'):
 
 
 class Turtle_Manager():
-    def __init__(self):
-        df = pd.read_csv(
-            'https://s3-us-west-2.amazonaws.com/cool-turtles/turtles.csv')
+    def __init__(self, test=False):
+        if test:
+            df = pd.read_csv(
+                'https://s3-us-west-2.amazonaws.com/cool-turtles/turtles.csv',
+                nrows=10)
+        else:
+            df = pd.read_csv(
+                'https://s3-us-west-2.amazonaws.com/cool-turtles/turtles.csv')
         df = df[df['Weight'] != 0]
         df = df[df['Carapace'] != 0]
         df = df[df['Plastron'] != 0]
