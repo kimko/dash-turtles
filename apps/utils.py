@@ -37,17 +37,17 @@ def drpdwn_traceType(id):
     return div
 
 
-def drpdwn_tDimensions(id):
+def drpdwn_tDimensions(id, default='Weight'):
     div = html.Div(
         dcc.Dropdown(
-            id='box1_dwn_y',
+            id=id,
             options=[
                 {'label': 'Weight', 'value': 'Weight'},
                 {'label': 'Carapace', 'value': 'Carapace'},
                 {'label': 'Plastron', 'value': 'Plastron'},
                 {'label': 'Annuli', 'value': 'Annuli'},
             ],
-            value='Weight',
+            value=default,
             clearable=False,
         ),
         className='two columns',
