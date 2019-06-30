@@ -55,6 +55,24 @@ def drpdwn_tDimensions(id, default='Weight'):
     return div
 
 
+def drpdwn_oDimensions(id, default='None'):
+    div = html.Div(
+        dcc.Dropdown(
+            id=id,
+            options=[
+                {'label': 'Annuli', 'value': 'Annuli'},
+                {'label': 'Capture Location', 'value': 'Capture Location'},
+                {'label': 'Gender', 'value': 'Gender'},
+                {'label': 'None', 'value': 'None'},
+            ],
+            value=default,
+            clearable=False,
+        ),
+        className='two columns',
+    )
+    return div
+
+
 def drpdwn_frequency(id, option='all'):
     options = [
         {'label': 'Daily', 'value': 'D'},
