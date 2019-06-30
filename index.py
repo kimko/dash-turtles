@@ -4,7 +4,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 from app import app
-from apps import explore, distribution, explore_by_month
+from apps import explore, distribution, explore_by_month, explore_3d
 
 app.layout = html.Div(
     [
@@ -29,6 +29,7 @@ app.layout = html.Div(
                     dcc.Tab(label='Explore by Month', value='explore_by_month_tab'),
                     dcc.Tab(label='Explore Surveys', value='explore_tab'),
                     dcc.Tab(label='Distributions', value='distributions_tab'),
+                    dcc.Tab(label='Explore 3d', value='threeD_tab'),
                 ],
                 value='explore_tab',
             )
@@ -57,6 +58,8 @@ def render_content(tab):
         return explore_by_month.layout
     elif tab == 'explore_tab':
         return explore.layout
+    elif tab == 'threeD_tab':
+        return explore_3d.layout
     else:
         return explore.layout
 
