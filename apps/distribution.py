@@ -4,6 +4,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from plotly import graph_objs as go
 import plotly.figure_factory as ff
+import plotly_express as px
 
 from app import app
 import apps.utils as utils
@@ -40,6 +41,14 @@ layout = html.Div([
     # Chart 2
     html.Div(id='facet_grid_1_container'),
 
+    # chart 3
+    html.Div(
+        [
+            html.Div(children='Scatter plot:'),
+            utils.drpdwn_tDimensions('box2_dwn_x', 'Carapace'),
+        ],
+        className='row', style={'marginBottom': '10'},),
+    html.Div(id='scatter_1_container'),
 ])
 
 
@@ -85,8 +94,33 @@ def update_facet_grid1(traceType, y):
         facet_col='Capture Location',
         trace_type=traceType,
     )
-    facet_hist['layout']['title'] = '{} - {} by gender and location'.format(traceType, y)
+    facet_hist['layout']['title'] = '{} - {} by gender and location'.format(
+        traceType, y)
     return dcc.Graph(
         id='facet_grid_1',
         figure=facet_hist,
     )
+
+
+def scatter1_plot(df, x, y):
+    '''
+    Generate the plot.
+    '''
+    figure = go.Figure(
+        px.scatter(
+            df, x=x, y=y, color="Gender", trendline="ols", marginal_x="violin", marginal_y="violin"))
+    return dcc.Graph(
+        id='scatter_1',
+        figure=figure)
+
+
+@app.callback(
+    Output('scatter_1_container', 'children'),
+    [
+        Input('box2_dwn_x', 'value'),
+        Input('box1_dwn_y', 'value')])
+def scatter1_update(x, y):
+    '''
+    Render and update the scatter plot when y-button value changes.
+    '''
+    return scatter1_plot(df, x, y)
