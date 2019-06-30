@@ -6,7 +6,6 @@ import dash_html_components as html
 from app import app
 from apps import explore, distribution, explore_by_month, explore_3d
 
-app.enable_dev_tools()
 app.layout = html.Div(
     [
         # header
