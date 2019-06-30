@@ -49,7 +49,13 @@ class Turtle_Manager():
         df['Month'] = df.Date.map(lambda x: x.month)
         df['Year'] = df.Date.map(lambda x: x.year)
         df.Gravid = df.Gravid.map({True: 'Y', False: ''})
-
+        latLong = {
+            'Mason Flats': ('45.520933', '-122.674101'),
+            'Whitaker Ponds': ('45.573749', '-122.613542'),
+            'Gresham': ('45.507347', '-122.433480'),
+        }
+        df['lat'] = df['Capture Location'].map(lambda x: latLong[x][0]).astype('float32')
+        df['long'] = df['Capture Location'].map(lambda x: latLong[x][1]).astype('float32')
         self.df = df
 
     def get_df(self):
