@@ -1,8 +1,12 @@
+from os import getenv
+
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
 
 import pandas as pd
 
+CHUNKSIZE = 1000
+URL = 'https://s3-us-west-2.amazonaws.com/cool-turtles/turtles.csv'
 
 def filter_from_periodStart_to_endDate(df, endDate, period):
     endDate = datetime.strptime(endDate, '%Y-%m-%d')
@@ -33,13 +37,15 @@ def get_count_per_period_and_year(df, period='M'):
 
 class Turtle_Manager():
     def __init__(self, test=False):
+        location = getenv('csv_location', URL)
+        # TODO logging
+        print("Reading from", location)
         if test:
-            df = pd.read_csv(
-                'https://s3-us-west-2.amazonaws.com/cool-turtles/turtles.csv',
-                nrows=10)
+            reader = pd.read_csv(location, chunksize=CHUNKSIZE, iterator=True, nrows=10)
         else:
-            df = pd.read_csv(
-                'https://s3-us-west-2.amazonaws.com/cool-turtles/turtles.csv')
+            reader = pd.read_csv(location, chunksize=CHUNKSIZE, iterator=True)
+        df = pd.concat(reader, ignore_index=True)
+        print(df.shape[0])
         df = df[df['Weight'] != 0]
         df = df[df['Carapace'] != 0]
         df = df[df['Plastron'] != 0]
