@@ -1,3 +1,5 @@
+import inspect
+
 import dash_html_components as html
 import dash_core_components as dcc
 
@@ -112,3 +114,8 @@ def drpdwn_LocationPicker(id):
         className='four columns',
     )
     return div
+
+def helper_print_caller():
+    curframe = inspect.currentframe()
+    calframe = inspect.getouterframes(curframe, 2)
+    print('caller name:', calframe[2][1])

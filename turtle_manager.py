@@ -3,6 +3,7 @@ from os import getenv
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
 
+from apps.utils import helper_print_caller as print_caller
 import pandas as pd
 
 CHUNKSIZE = 1000
@@ -39,6 +40,7 @@ class Turtle_Manager():
     def __init__(self, test=False):
         location = getenv('csv_location', URL)
         # TODO logging
+        print_caller()
         print("Reading from", location)
         if test:
             reader = pd.read_csv(location, chunksize=CHUNKSIZE, iterator=True, nrows=10)
