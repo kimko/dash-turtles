@@ -5,10 +5,8 @@ import dash_html_components as html
 import plotly_express as px
 
 from app import app
+from app import tm as turtles
 import apps.utils as utils
-from turtle_manager import Turtle_Manager as tm
-
-turtles = tm()
 
 layout = [
     # Button Group 1

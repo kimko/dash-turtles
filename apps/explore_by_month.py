@@ -6,11 +6,10 @@ import plotly.graph_objs as go
 import dash_html_components as html
 
 from app import app
+from app import tm as turtles
 import apps.utils as utils
-from turtle_manager import Turtle_Manager as tm
 from turtle_manager import get_count_per_period_and_year
 
-turtles = tm()
 
 layout = [
     # top controls

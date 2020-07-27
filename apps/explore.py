@@ -8,11 +8,10 @@ import dash_html_components as html
 import pandas as pd
 
 from app import app
+from app import tm as turtles
 import apps.utils as utils
-from turtle_manager import Turtle_Manager as tm
 from turtle_manager import filter_from_periodStart_to_endDate
 
-turtles = tm()
 
 layout = [
     # top controls

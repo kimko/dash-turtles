@@ -1,4 +1,6 @@
+from requests import get
 from os import getenv
+import json
 
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
@@ -38,10 +40,21 @@ def get_count_per_period_and_year(df, period='M'):
 
 class Turtle_Manager():
     def __init__(self, test=False):
+        turtle_service_url = getenv('turtle_service_url')
+        if turtle_service_url:
+            #  TODO error handling
+            res = get(turtle_service_url + '/turtles')
+            data = json.loads(res.content)
+            self.df = pd.read_json(data['data']['turtles'])
+        else:
+            self.df = self.load_from_csv(test)
+
+
+    def load_from_csv(self, test=False):
         location = getenv('csv_location', URL)
         # TODO logging
         print_caller()
-        print("Reading from", location)
+        print("(Deprecated) Reading from", location)
         if test:
             reader = pd.read_csv(location, chunksize=CHUNKSIZE, iterator=True, nrows=10)
         else:
@@ -64,7 +77,7 @@ class Turtle_Manager():
         }
         df['lat'] = df['Capture Location'].map(lambda x: latLong[x][0]).astype('float32')
         df['long'] = df['Capture Location'].map(lambda x: latLong[x][1]).astype('float32')
-        self.df = df
+        return df
 
     def get_df(self):
         return self.df

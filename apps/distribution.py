@@ -6,11 +6,10 @@ from plotly import graph_objs as go
 import plotly.figure_factory as ff
 import plotly_express as px
 
-from app import app
+from app import app, tm
 import apps.utils as utils
-from turtle_manager import Turtle_Manager
 
-df = Turtle_Manager().get_df()
+df = tm.get_df()
 
 layout = html.Div([
     # Button Group 1
