@@ -10,7 +10,6 @@ import pandas as pd
 from app import app
 from app import tm as turtles
 import apps.utils as utils
-from turtle_manager import filter_from_periodStart_to_endDate
 
 
 layout = [
@@ -47,15 +46,15 @@ def update_explore_chart(rows, selected):
         figure={
             'data': [
                 go.Scatter(
-                    x=df.loc[df.ID == turtleID, 'Date'],
-                    y=df.loc[df.ID == turtleID, 'Weight'],
+                    x=df.loc[df.ID == str(turtleID), 'Date'],
+                    y=df.loc[df.ID == str(turtleID), 'Weight'],
                     mode='markers',
                     opacity=0.7,
                     marker={
                         'size': 15,
                         'line': {'width': 0.5, 'color': 'white'}
                     },
-                    name='Turtle ' + turtleID
+                    name='Turtle ' + str(turtleID)
                 ) for turtleID in turtleIDs],
             'layout': {
                 'title': 'Individual turtles',
@@ -76,13 +75,15 @@ def update_table(clickData, frequency):
     columns = ['ID', 'Date', 'Capture Location', 'Gender', 'Annuli',
                'Annuli_orig', 'Weight', 'Carapace', 'Plastron', 'Gravid']
     df = turtles.get_df()
-    df = df[columns].sort_values('Date').copy()
+    df = df[columns].copy()
     if clickData:
         endDate = clickData['points'][0]['x']
+        print(endDate)
     else:
         return ''
-    filter = filter_from_periodStart_to_endDate(df, endDate, frequency)
-    data = df[filter].to_dict('records')
+    # filter = filter_from_periodStart_to_endDate(df, endDate, frequency)
+    data = turtles.filter_from_periodStart_to_endDate(endDate, frequency)
+    data = data.to_dict('records')
 
     table = dash_table.DataTable(
         id='table_1',

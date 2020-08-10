@@ -8,14 +8,13 @@ import dash_html_components as html
 from app import app
 from app import tm as turtles
 import apps.utils as utils
-from turtle_manager import get_count_per_period_and_year
 
 
 layout = [
     # top controls
     html.Div(
         [
-            utils.drpdwn_frequency('exp_dwn_freq', option='MQ'),
+            utils.drpdwn_frequency('exp_dwn_freq', option='MQS'),
             utils.drpdwn_LocationPicker('exp_dwn_location'),
         ],
         className='row',
@@ -57,15 +56,16 @@ def by_month_plot(df, years, caption, period):
     return graph
 
 
-def by_month_chart_format_data(df, period='Q', locations=[]):
+def by_month_chart_format_data(period='Q', locations=[]):
     """
     Generate the data needed for the by_month chart.
     """
     caption = {'M': 'Count per Month',
-               'Q': 'Count per Quarter'}
-    if len(locations) > 0:
-        df = df[df['Capture Location'].isin(locations)]
-    df = get_count_per_period_and_year(df, period)
+               'Q': 'Count per Quarter',
+               'S': 'Count per Season',
+               }
+    df = turtles.get_count_per_period_and_year(period, locations)
+    # TODO move further data manipulation to service
     years = df.Year.unique()
     years.sort()
     return df, years, caption
@@ -79,7 +79,7 @@ def by_month_chart_update(period, locations):
     """
     Update and Render by_month chart everytime the frequency or location dropdown changes value
     """
-    df = turtles.get_df()
-    df, years, caption = by_month_chart_format_data(df, period, locations)
+    # df = turtles.get_df()
+    df, years, caption = by_month_chart_format_data(period, locations)
 
     return by_month_plot(df, years, caption, period)

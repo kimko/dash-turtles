@@ -12,6 +12,7 @@ CHUNKSIZE = 1000
 URL = 'https://s3-us-west-2.amazonaws.com/cool-turtles/turtles.csv'
 
 def filter_from_periodStart_to_endDate(df, endDate, period):
+    raise Exception("filter_from_periodStart_to_endDate Deprecated..use data service")
     endDate = datetime.strptime(endDate, '%Y-%m-%d')
     startDate = str(endDate - relativedelta(months=4))
     if period == 'D':
@@ -28,6 +29,7 @@ def filter_from_periodStart_to_endDate(df, endDate, period):
 
 
 def get_count_per_period_and_year(df, period='M'):
+    raise Exception("get_count_per_period_and_year Deprecated..use data service")
     if period == 'M':
         df['Period'] = df.Date.map(lambda x: x.month_name())
     elif period == 'Q':
@@ -40,17 +42,29 @@ def get_count_per_period_and_year(df, period='M'):
 
 class Turtle_Manager():
     def __init__(self, test=False):
-        turtle_service_url = getenv('turtle_service_url')
-        if turtle_service_url:
-            #  TODO error handling
-            res = get(turtle_service_url + '/turtles')
-            data = json.loads(res.content)
-            self.df = pd.read_json(data['data']['turtles'])
-        else:
-            self.df = self.load_from_csv(test)
+        self.turtle_service_url = getenv('turtle_service_url')
+        assert(self.turtle_service_url)
+        #  TODO error handling
+        res = get(self.turtle_service_url + '/turtles')
+        data = json.loads(res.content)
+        self.df = pd.read_json(data['data']['turtles'])
 
+    def get_count_per_period_and_year(self, period, locations):
+        # TODO error handling
+        res = get(f'{self.turtle_service_url}/turtlesPeriodYear?period={period}&locations={locations}')
+        data = json.loads(res.content)
+        df = pd.read_json(data['data']['turtles'])
+        return df
+
+    def filter_from_periodStart_to_endDate(self, endDate, frequency):
+        # TODO error handling
+        res = get(f'{self.turtle_service_url}/turtlesPeriodStartToEnd?period={frequency}&endDate={endDate}')
+        data = json.loads(res.content)
+        df = pd.read_json(data['data']['turtles'])
+        return df
 
     def load_from_csv(self, test=False):
+        raise Exception("load_from_csv Deprecated..use data service")
         location = getenv('csv_location', URL)
         # TODO logging
         print_caller()

@@ -81,11 +81,12 @@ def drpdwn_frequency(id, option='all'):
         {'label': 'Weekly', 'value': 'W'},
         {'label': 'Monthly', 'value': 'M'},
         {'label': 'Quartlery', 'value': 'Q'},
+        {'label': 'Seasonaly', 'value': 'Y'},
         {'label': 'Anually', 'value': 'A'},
     ]
     # Use Month and Quarter Only
-    if option == 'MQ':
-        options = options[2:4]
+    if option == 'MQS':
+        options = options[2:5]
     div = html.Div(
         dcc.Dropdown(
             id=id,
