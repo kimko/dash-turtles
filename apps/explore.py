@@ -81,7 +81,6 @@ def update_table(clickData, frequency):
         print(endDate)
     else:
         return ''
-    # filter = filter_from_periodStart_to_endDate(df, endDate, frequency)
     data = turtles.filter_from_periodStart_to_endDate(endDate, frequency)
     data = data.to_dict('records')
 
