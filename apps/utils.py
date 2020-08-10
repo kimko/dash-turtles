@@ -76,17 +76,23 @@ def drpdwn_oDimensions(id, default='None'):
 
 
 def drpdwn_frequency(id, option='all'):
-    options = [
-        {'label': 'Daily', 'value': 'D'},
-        {'label': 'Weekly', 'value': 'W'},
-        {'label': 'Monthly', 'value': 'M'},
-        {'label': 'Quartlery', 'value': 'Q'},
-        {'label': 'Seasonaly', 'value': 'Y'},
-        {'label': 'Anually', 'value': 'A'},
-    ]
+
     # Use Month and Quarter Only
     if option == 'MQS':
-        options = options[2:5]
+        options = [
+            {'label': 'Monthly', 'value': 'M'},
+            {'label': 'Quartlery', 'value': 'Q'},
+            {'label': 'Seasonaly', 'value': 'S'},
+        ]
+    else:
+        options = [
+            {'label': 'Daily', 'value': 'D'},
+            {'label': 'Weekly', 'value': 'W'},
+            {'label': 'Monthly', 'value': 'M'},
+            {'label': 'Quartlery', 'value': 'Q'},
+            {'label': 'Anually', 'value': 'A'},
+        ]
+
     div = html.Div(
         dcc.Dropdown(
             id=id,

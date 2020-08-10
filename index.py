@@ -26,7 +26,7 @@ app.layout = html.Div(
                 id='tabs',
                 style={'height': '20', 'verticalAlign': 'middle'},
                 children=[
-                    dcc.Tab(label='Explore by Month', value='explore_by_month_tab'),
+                    dcc.Tab(label='Compare Years', value='explore_by_month_tab'),
                     dcc.Tab(label='Explore Surveys', value='explore_tab'),
                     dcc.Tab(label='Distributions', value='distributions_tab'),
                     dcc.Tab(label='Explore 3d', value='threeD_tab'),

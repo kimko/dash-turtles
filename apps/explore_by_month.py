@@ -36,15 +36,20 @@ def by_month_plot(df, years, caption, period):
             y=df[df.Year == year].Count,
             name=str(year)
         ) for year in years]
+
+    xaxis = {
+        'type': 'category',
+        'categoryorder': 'array',
+        'categoryarray': month_name[1:13],
+    }
+    if period == 'S':
+        xaxis['title'] = '"Early" means all data before September'
+
     layout = go.Layout(
         barmode='group',
         hovermode='closest',
         title=caption[period],
-        xaxis={
-            'type': 'category',
-            'categoryorder': 'array',
-            'categoryarray': month_name[1:13]
-        },
+        xaxis=xaxis,
         yaxis={'title': 'Count'}
     )
 
